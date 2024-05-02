@@ -1,12 +1,28 @@
+import { RefObject, useRef } from "react";
+
 const Lesson3_2 = () => {
-  const scrollToIndex = () => {};
+  const listRef: RefObject<HTMLUListElement> = useRef<HTMLUListElement>(null);
+
+
+  const scrollToIndex = (index: number) => {
+    console.log(listRef.current);
+    const listNode = listRef.current;
+    const imgNode = listNode?.querySelectorAll("li > img")[index];
+    console.log(imgNode)
+
+    imgNode?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
+  };
 
   return (
     <div>
       <nav>
-        <button onClick={() => scrollToIndex()}>Cat1</button>
-        <button onClick={() => scrollToIndex()}>Cat2</button>
-        <button onClick={() => scrollToIndex()}>Cat3</button>
+        <button onClick={() => scrollToIndex(0)}>Cat1</button>
+        <button onClick={() => scrollToIndex(1)}>Cat2</button>
+        <button onClick={() => scrollToIndex(2)}>Cat3</button>
       </nav>
       <div style={{ overflowX: "auto", maxWidth: "700px", margin: "auto" }}>
         <ul
