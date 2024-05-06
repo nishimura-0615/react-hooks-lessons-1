@@ -8,8 +8,10 @@ const Lesson7_1 = () => {
   const [tab, setTab] = useState("about");
 
   function selectTab(nextTab: string) {
-    setTab(nextTab);
+      setTab(nextTab);
   }
+
+
 
   return (
     <div>
