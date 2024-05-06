@@ -1,9 +1,40 @@
-const Thread = () => {
-  const handleSubmit = async () => {};
+import { useRef } from "react";
+import { useOptimistic } from "react";
+import { Message } from "./Lesson6_1";
 
+const Thread = ({
+  messages,
+  sendMessage,
+}: {
+  messages: Message[];
+  sendMessage: (formData: FormData) => Promise<void>;
+}) => {
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const formAction = async () => {
+    const formData = new FormData(formRef.current!)
+    addOptimisticMessage(formData.get("message"));
+    await sendMessage(formData);
+    formRef.current?.reset();
+  };
+
+  const [ optmisticMessages, addOptimisticMessage ] = useOptimistic(
+    messages,
+    (state:Message[], newMessage: Message) => [
+    ...state,
+    {
+      text: newMessage,
+      sending: true,
+    },
+   ]
+  );
+  //small sending*APIを送っている間にsendingを表示している
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      {optmisticMessages.map((message: Message, index: number) => (
+        <div key={index}>{message.text} {!!message.sending && <small>(Sending...)</small>}</div>
+      ))}
+      <form action={formAction} ref={formRef}>
         <input
           type="text"
           name="message"
